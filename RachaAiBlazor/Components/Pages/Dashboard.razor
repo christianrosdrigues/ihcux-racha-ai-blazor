@@ -1,0 +1,295 @@
+@page "/dashboard"
+
+@using RachaAiBlazor.Models
+@using RachaAiBlazor.Components.Shared
+
+<PageTitle>App RachaAi</PageTitle>
+
+<div class="container mt-4">
+
+    <h1 class="fw-bold mb-4">
+        Olá, Christian!
+    </h1>
+
+    <!-- CARDS -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-success text-white shadow border-0 rounded-4">
+                <div class="card-body">
+                    <h5>Total a Receber</h5>
+                    <h2>R$ 850,00</h2>
+                    <p class="mb-0">
+                        Valor disponível para recebimento
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-danger text-white shadow border-0 rounded-4">
+                <div class="card-body">
+                    <h5>Total a Pagar</h5>
+                    <h2>R$ 320,00</h2>
+                    <p class="mb-0">
+                        Gastos pendentes
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card bg-dark text-white shadow border-0 rounded-4">
+                <div class="card-body">
+                    <h5>Saldo Geral</h5>
+                    <h2>R$ 530,00</h2>
+                    <p class="mb-0">
+                        Situação financeira atual
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BUSCA -->
+
+    <div class="mb-4">
+
+        <input type="text"
+               class="form-control form-control-lg"
+               placeholder="🔍 Buscar grupo ou categoria..."
+               @bind="busca"
+               @bind:event="oninput" />
+
+    </div>
+
+    <!-- LISTA -->
+
+    <h3 class="fw-bold mb-3">
+        Seus Grupos Ativos
+    </h3>
+
+    @if (GruposFiltrados.Any())
+    {
+        @foreach (var grupo in GruposFiltrados)
+        {
+            <GrupoCard Grupo="grupo" />
+        }
+    }
+    else
+    {
+        <div class="alert alert-info rounded-4">
+            Você ainda não participa de nenhum grupo.
+            Que tal criar um?
+        </div>
+    }
+
+    <!-- BOTÃO -->
+
+    <button class="btn btn-primary shadow btn-fab"
+            @onclick="AbrirModal">
+
+        Novo Gasto
+
+    </button>
+
+</div>
+
+<!-- MODAL -->
+
+@if (mostrarModal)
+{
+    <div class="modal-overlay">
+
+        <div class="modal-custom">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h3 class="fw-bold">
+                    Novo Gasto
+                </h3>
+
+                <button class="btn btn-danger"
+                        @onclick="FecharModal">
+
+                    X
+
+                </button>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Nome do Grupo
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       @bind="novoGrupo.Nome" />
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Categoria
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       @bind="novoGrupo.Categoria" />
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Valor
+                </label>
+
+                <input type="number"
+                       class="form-control"
+                       @bind="novoGrupo.Valor" />
+
+            </div>
+
+            <div class="form-check mb-4">
+
+                <input class="form-check-input"
+                       type="checkbox"
+                       @bind="novoGrupo.TenhoCredito" />
+
+                <label class="form-check-label">
+                    Tenho crédito nesse grupo
+                </label>
+
+            </div>
+
+            <button class="btn btn-success w-100"
+                    @onclick="AdicionarGrupo">
+
+                Salvar Gasto
+
+            </button>
+
+        </div>
+
+    </div>
+}
+
+<style>
+
+    .btn-fab {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        padding: 15px 25px;
+        font-size: 20px;
+        border-radius: 50px;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        background: rgba(0,0,0,0.5);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        z-index: 999;
+    }
+
+    .modal-custom {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        width: 400px;
+
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+</style>
+
+@code {
+
+    private bool mostrarModal = false;
+
+    private Grupo novoGrupo = new();
+
+    private void AbrirModal()
+    {
+        mostrarModal = true;
+    }
+
+    private void FecharModal()
+    {
+        mostrarModal = false;
+    }
+
+    private void AdicionarGrupo()
+    {
+        grupos.Add(new Grupo
+        {
+            Nome = novoGrupo.Nome,
+            Categoria = novoGrupo.Categoria,
+            Valor = novoGrupo.Valor,
+            TenhoCredito = novoGrupo.TenhoCredito
+        });
+
+        novoGrupo = new Grupo();
+
+        mostrarModal = false;
+    }
+
+    private string busca = string.Empty;
+
+    private List<Grupo> grupos = new()
+    {
+        new Grupo
+        {
+            Nome = "Casa",
+            Categoria = "República Central",
+            Valor = 120,
+            TenhoCredito = false
+        },
+
+        new Grupo
+        {
+            Nome = "Lazer",
+            Categoria = "Churrasco de Domingo",
+            Valor = 80,
+            TenhoCredito = true
+        },
+
+        new Grupo
+        {
+            Nome = "Viagem",
+            Categoria = "Viagem Belo Horizonte",
+            Valor = 250,
+            TenhoCredito = false
+        },
+
+        new Grupo
+        {
+            Nome = "Contas",
+            Categoria = "Netflix & Internet",
+            Valor = 45,
+            TenhoCredito = true
+        }
+    };
+
+    private IEnumerable<Grupo> GruposFiltrados =>
+        grupos.Where(g =>
+            string.IsNullOrWhiteSpace(busca)
+            || g.Nome.Contains(busca, StringComparison.OrdinalIgnoreCase)
+            || g.Categoria.Contains(busca, StringComparison.OrdinalIgnoreCase)
+        );
+}
