@@ -45,6 +45,4 @@ GrupoCard.razor
 # Imagem
 
 
-<p align="center">
-  <img src="images/imagem.jpeg" width="900">
-</p>
+![Execução do sistema](./imagem.jpeg)
