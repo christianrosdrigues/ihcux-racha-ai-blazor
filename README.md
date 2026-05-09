@@ -45,4 +45,4 @@ GrupoCard.razor
 # Imagem
 
 
-![Execução do sistema](./imagem.jpeg)
+(./imagem.jpeg)
