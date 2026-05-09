@@ -43,4 +43,5 @@ Os grupos financeiros são exibidos dinamicamente utilizando o componente reutil
 GrupoCard.razor
 
 # Imagem
+
 ![Dashboard](images/imagem.jpeg)
