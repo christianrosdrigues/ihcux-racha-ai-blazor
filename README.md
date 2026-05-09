@@ -44,4 +44,7 @@ GrupoCard.razor
 
 # Imagem
 
-![Dashboard](images/imagem.jpeg)
+
+<p align="center">
+  <img src="images/imagem.jpeg" width="900">
+</p>
