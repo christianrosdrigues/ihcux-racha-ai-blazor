@@ -39,5 +39,5 @@ Os cards utilizam cores para melhorar a visualização financeira do usuário:
 
 Os grupos financeiros são exibidos dinamicamente utilizando o componente reutilizável:
 
-```txt
+
 GrupoCard.razor
